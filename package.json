@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sahlhoff/react-native-pulse.git"
+    "url": "git+https://github.com/AirIntServices/react-native-pulse.git"
   },
   "keywords": [
     "react",
@@ -22,7 +22,7 @@
   "author": "Chad Sahlhoff",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sahlhoff/react-native-pulse/issues"
+    "url": "https://github.com/AirIntServices/react-native-pulse/issues"
   },
-  "homepage": "https://github.com/sahlhoff/react-native-pulse#readme"
+  "homepage": "https://github.com/AirIntServices/react-native-pulse#readme"
 }
