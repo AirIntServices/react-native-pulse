@@ -7,7 +7,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    alignItems: "center"
+    alignItems: "center",
+    width: 300,
+    height: 300,
   },
   pulse: {
     position: "absolute",
@@ -50,24 +52,15 @@ export default class Pulse extends Component {
     super(props);
 
     this.state = {
-      color: this.props.color,
-      duration: this.props.duration,
-      image: this.props.image,
-      maxDiameter: this.props.diameter,
-      numPulses: this.props.numPulses,
-      pulses: [],
-      pulseStyle: this.props.pulseStyle,
-      speed: this.props.speed,
-      started: false,
-      style: this.props.style
+      pulses: []
     };
   }
 
   mounted = true;
 
   componentDidMount() {
-    const { numPulses, duration } = this.props;
-    const speed = 10;
+    const { numPulses, duration, speed } = this.props;
+
     this.setState({ started: true });
 
     let a = 0;
@@ -98,7 +91,7 @@ export default class Pulse extends Component {
         pulseKey: pulses.length + 1,
         diameter: this.props.initialDiameter,
         opacity: 0.5,
-        centerOffset: (this.props.diameter - this.props.initialDiameter) / 2
+        centerOffset: (this.props.maxDiameter - this.props.initialDiameter) / 2
       };
 
       pulses.push(pulse);
@@ -110,16 +103,16 @@ export default class Pulse extends Component {
   updatePulse = () => {
     if (this.mounted) {
       const pulses = this.state.pulses.map((p, i) => {
-        let maxDiameter = this.props.diameter;
+        let maxDiameter = this.props.maxDiameter;
         let newDiameter = p.diameter > maxDiameter ? 0 : p.diameter + 2;
         let centerOffset = (maxDiameter - newDiameter) / 2;
-        let opacity = Math.abs(newDiameter / this.props.diameter - 1);
-
+        let opacity = Math.abs(newDiameter / this.props.maxDiameter - 1);
         let pulse = {
           pulseKey: i + 1,
           diameter: newDiameter,
           opacity: opacity > 0.5 ? 0.5 : opacity,
-          centerOffset: centerOffset
+          centerOffset: centerOffset,
+          color: this.props.color,
         };
 
         return pulse;
@@ -129,31 +122,19 @@ export default class Pulse extends Component {
     }
   };
 
-  getColor() {
-    const perc = this.props.color;
-
-    let r,
-      g,
-      b = 0;
-    if (perc < 50) {
-      r = 255;
-      g = Math.round(5.1 * perc) - Math.max(this.props.numPulses * 20, 0);
-    } else {
-      g = 255;
-      r =
-        Math.round(510 - 5.1 * perc) -
-        Math.max(50 - this.props.numPulses * 5, 0);
-    }
-    var h = r * 0x10000 + g * 0x100 + b;
-    return "#" + ("000000" + h.toString(16)).slice(-6);
-  }
-
   render() {
-    const { image, pulses, pulseStyle, started, style } = this.state;
+    const {
+      color,
+      image,
+      maxDiameter,
+      pulses,
+      pulseStyle,
+      started,
+      style
+    } = this.state;
     const containerStyle = [styles.container, style];
-    const maxDiameter = this.props.diameter;
     const pulseWrapperStyle = { width: maxDiameter, height: maxDiameter };
-    const color = this.props.color;
+    console.log(color)
     return (
       <View style={containerStyle}>
         {started && (
@@ -164,7 +145,7 @@ export default class Pulse extends Component {
                 style={[
                   styles.pulse,
                   {
-                    backgroundColor: color,
+                    backgroundColor: pulse.color,
                     width: pulse.diameter,
                     height: pulse.diameter,
                     opacity: pulse.opacity,
@@ -183,3 +164,4 @@ export default class Pulse extends Component {
     );
   }
 }
+
